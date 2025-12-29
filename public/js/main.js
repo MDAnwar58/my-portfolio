@@ -1,17 +1,32 @@
 // Counter animation for stats
-function animateCounter(element, target, duration = 2000) {
-    let current = 0;
-    const increment = target / (duration / 16);
+function animateCounter(element, targetValue) {
+    const duration = 5000; // Animation duration
+    const startTime = performance.now();
 
-    const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-            element.textContent = target;
-            clearInterval(timer);
+    // Determine decimal places
+    const decimalPlaces = targetValue.toString().split(".")[1]?.length || 0;
+
+    function updateCounter(currentTime) {
+        const elapsedTime = currentTime - startTime;
+        const progress = Math.min(elapsedTime / duration, 1);
+
+        // Easing function for smoother animation
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+
+        const currentValue = targetValue * easeOutQuart;
+        element.textContent = currentValue.toFixed(decimalPlaces);
+
+        if (progress < 1) {
+            requestAnimationFrame(updateCounter);
         } else {
-            element.textContent = Math.floor(current);
+            element.textContent = targetValue.toFixed(decimalPlaces);
         }
-    }, 16);
+    }
+
+    requestAnimationFrame(updateCounter);
+}
+function isFloat(n) {
+    return typeof n === "number" && !isNaN(n) && n % 1 !== 0;
 }
 
 // Initialize counter animations
@@ -21,7 +36,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
             if (entry.isIntersecting) {
-                const target = parseInt(entry.target.dataset.target);
+                let target = 0;
+                if (isFloat(Number(entry.target.dataset.target)))
+                    target = parseFloat(entry.target.dataset.target);
+                else target = parseInt(entry.target.dataset.target);
                 animateCounter(entry.target, target);
                 observer.unobserve(entry.target);
             }

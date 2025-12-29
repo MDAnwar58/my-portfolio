@@ -42,17 +42,26 @@
 
             <div class="hero-stats">
                 <div class="stat">
-                    <span class="stat-number" data-target="50">0</span>
+                    <span class="stat-number" data-target="{{ $works->count() }}">0</span>
                     <span class="stat-label">Projects</span>
                 </div>
                 <div class="stat">
-                    <span class="stat-number" data-target="5">0</span>
+                    @php
+                    function convertOrdinalToNumber($string)
+                    {
+                    // Remove non-numeric characters except decimal point and minus sign
+                    $cleaned = preg_replace('/[^\d.-]/', '', $string);
+                    return (float) $cleaned;
+                    }
+                    $year_of_exp = convertOrdinalToNumber($appContent->exp_duration)
+                    @endphp
+                    <span class="stat-number" data-target="{{ $year_of_exp }}">0</span>
                     <span class="stat-label">Years Exp</span>
                 </div>
-                <div class="stat">
+                {{-- <div class="stat">
                     <span class="stat-number" data-target="25">0</span>
                     <span class="stat-label">Happy Clients</span>
-                </div>
+                </div> --}}
             </div>
 
             <div class="hero-actions">
