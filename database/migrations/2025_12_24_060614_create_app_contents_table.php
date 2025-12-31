@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->string('hero_l_title')->nullable();
             $table->text('hero_short_desc')->nullable();
             $table->integer('projects_count')->default(0);
-            $table->string('exp_duration')->nullable();
+            $table->timestamp('exp_duration')->nullable();
             $table->integer('happy_client')->default(0);
             $table->string('feature_1')->nullable();
             $table->string('feature_2')->nullable();

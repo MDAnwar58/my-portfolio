@@ -15,7 +15,7 @@ CREATE TABLE `app_contents` (
   `hero_l_title` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `hero_short_desc` text COLLATE utf8mb4_unicode_ci,
   `projects_count` int NOT NULL DEFAULT '0',
-  `exp_duration` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `exp_duration` timestamp NULL DEFAULT NULL,
   `happy_client` int NOT NULL DEFAULT '0',
   `feature_1` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `feature_2` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -111,7 +111,7 @@ CREATE TABLE `migrations` (
   `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `password_reset_tokens`;
 CREATE TABLE `password_reset_tokens` (
@@ -138,12 +138,13 @@ DROP TABLE IF EXISTS `skills`;
 CREATE TABLE `skills` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `date_of_exp` timestamp NULL DEFAULT NULL,
   `url` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `image_url` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 DROP TABLE IF EXISTS `social_media`;
 CREATE TABLE `social_media` (
@@ -175,6 +176,17 @@ CREATE TABLE `users` (
   UNIQUE KEY `users_email_unique` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+DROP TABLE IF EXISTS `visitors`;
+CREATE TABLE `visitors` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `ip` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `device_token` varchar(500) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `device_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 DROP TABLE IF EXISTS `works`;
 CREATE TABLE `works` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
@@ -191,10 +203,10 @@ CREATE TABLE `works` (
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `app_contents` (`id`, `hero_f_title`, `hero_m_title`, `hero_l_title`, `hero_short_desc`, `projects_count`, `exp_duration`, `happy_client`, `feature_1`, `feature_2`, `feature_3`, `feature_4`, `view_w_title`, `view_w_short_desc`, `view_s_title`, `view_s_short_desc`, `c_title`, `c_short_desc`, `p_avatar`, `created_at`, `updated_at`, `working_for`) VALUES
-(1, 'Creative', 'Developer', '& Designer', 'Crafting digital experiences that blend innovative\r\n                design with cutting-edge technology. Specializing in web\r\n                development, UI/UX design, and creative solutions.', 32, '2.5th', 23, 'Web Dev', 'Fast', 'UI/UX', 'Modern', 'My Portfolio', 'Check out some of my recent projects and creative work.', 'My Skills', 'Technologies and tools I work with to build amazing projects.', 'Let\'s Get In Touch', 'Fill out the form below and I\'ll get back to you as soon as possible.', 'http://127.0.0.1:8000/uploads/images/m8PZaSu8pdVvmfWqi9ALBWyr4ACGBYKZNmizzo7p.jpg', '2025-12-24 10:25:48', '2025-12-28 11:16:16', 'available');
+(1, 'Creative', 'Developer', '& Designer', 'Crafting digital experiences that blend innovative\r\n                design with cutting-edge technology. Specializing in web\r\n                development, UI/UX design, and creative solutions.', 32, '2022-04-07 00:00:00', 23, 'Web Dev', 'Fast', 'UI/UX', 'Modern', 'My Portfolio', 'Check out some of my recent projects and creative work.', 'My Skills', 'Technologies and tools I work with to build amazing projects.', 'Let\'s Get In Touch', 'Fill out the form below and I\'ll get back to you as soon as possible.', 'http://127.0.0.1:8000/uploads/images/m8PZaSu8pdVvmfWqi9ALBWyr4ACGBYKZNmizzo7p.jpg', '2025-12-24 10:25:48', '2025-12-30 15:01:13', 'available');
 INSERT INTO `cache` (`key`, `value`, `expiration`) VALUES
-('my-portfolio-cache-06588a4c421c22d254f2385342185210', 'i:1;', 1766919163),
-('my-portfolio-cache-06588a4c421c22d254f2385342185210:timer', 'i:1766919163;', 1766919163);
+('my-portfolio-cache-06588a4c421c22d254f2385342185210', 'i:1;', 1767143949),
+('my-portfolio-cache-06588a4c421c22d254f2385342185210:timer', 'i:1767143949;', 1767143949);
 
 INSERT INTO `contacts` (`id`, `f_name`, `l_name`, `email`, `subject`, `message`, `created_at`, `updated_at`, `is_read`) VALUES
 (1, 'Darrin', 'Kutch', 'russ.mcclure@example.net', 'Voluptas pariatur explicabo.', 'Occaecati omnis possimus vero earum. Est sed aperiam commodi incidunt nesciunt. Ea recusandae quos voluptas similique ut provident pariatur quia. Sed sint beatae quo illum. Nemo nesciunt assumenda hic.', '2025-12-23 08:10:19', '2025-12-23 08:10:19', 0),
@@ -316,36 +328,40 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (9, '2025_12_23_083849_add_is_read_to_contacts_table', 5),
 (10, '2025_12_24_060614_create_app_contents_table', 6),
 (11, '2025_12_24_110237_create_social_media_table', 7),
-(12, '2025_12_28_104812_add_a_column_in_app_contents_table', 8);
+(12, '2025_12_28_104812_add_a_column_in_app_contents_table', 8),
+(15, '2025_12_30_013019_add_a_column_in_skills_table', 9),
+(16, '2025_12_31_020221_create_visitors_table', 10);
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('iVXj4QDaQRhWEr4hUalOwqFAnszHFjWwJmX843hL', 25, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiNXJIZGNjUXRNcDV1SUVXZjMwMlczdkowcmZLalRlVmNKZHJUZFNVcSI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMCI7czo1OiJyb3V0ZSI7czo0OiJob21lIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MjU7fQ==', 1766920580),
-('nciEXJVtLwO7NnhuNhTBuMecbn5rA2bC9ruwcdB5', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoibDFLcUQ4VUVDVmhiUkZyWkU0Tmp3QzJEcU5lbWZ1QTc3RVVaZ0xpUyI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMCI7czo1OiJyb3V0ZSI7czo0OiJob21lIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1766918611);
-INSERT INTO `skills` (`id`, `name`, `url`, `image_url`, `created_at`, `updated_at`) VALUES
-(3, 'JavaScript', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg', NULL, '2025-12-23 06:31:08', '2025-12-23 06:31:08'),
-(7, 'React', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg', NULL, '2025-12-25 02:01:06', '2025-12-25 02:01:06'),
-(8, 'Next JS', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg', NULL, '2025-12-25 02:02:30', '2025-12-25 02:02:30'),
-(9, 'Vite JS', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg', NULL, '2025-12-25 02:03:20', '2025-12-25 02:03:20'),
-(10, 'Inertia JS', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/inertiajs/inertiajs-original.svg', NULL, '2025-12-25 02:04:45', '2025-12-25 02:04:45'),
-(11, 'TypeScript', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg', NULL, '2025-12-25 02:05:33', '2025-12-25 02:05:45'),
-(12, 'Laravel', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-original.svg', NULL, '2025-12-25 02:08:40', '2025-12-25 02:08:40'),
-(13, 'Livewire', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/livewire/livewire-original.svg', NULL, '2025-12-25 02:10:09', '2025-12-25 02:10:09'),
-(14, 'Node JS', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg', NULL, '2025-12-25 02:15:49', '2025-12-25 02:15:49'),
-(15, 'Express', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg', NULL, '2025-12-25 02:23:42', '2025-12-25 02:23:42'),
-(16, 'MongoDB', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg', NULL, '2025-12-25 02:25:33', '2025-12-25 02:25:33'),
-(17, 'Python', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg', NULL, '2025-12-25 02:26:51', '2025-12-25 02:26:51'),
-(18, 'Django', 'https://static.djangoproject.com/img/logos/django-logo-negative.svg', NULL, '2025-12-25 02:29:37', '2025-12-25 02:29:37'),
-(19, 'HTML', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg', NULL, '2025-12-25 03:02:37', '2025-12-25 03:02:37'),
-(20, 'CSS', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg', NULL, '2025-12-25 03:02:59', '2025-12-25 03:02:59'),
-(21, 'TailwindCSS', 'https://tailwindcss.com/_next/static/media/tailwindcss-mark.d52e9897.svg', NULL, '2025-12-25 03:04:27', '2025-12-25 03:05:38'),
-(22, 'Bootstrap', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg', NULL, '2025-12-25 03:06:12', '2025-12-25 03:06:12'),
-(23, 'Flutter', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg', NULL, '2025-12-25 03:08:07', '2025-12-25 03:08:07'),
-(24, 'PHP', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg', NULL, '2025-12-25 03:18:18', '2025-12-25 03:18:18'),
-(25, 'Laravel Splade', 'https://raw.githubusercontent.com/protonemedia/laravel-splade/main/logo.svg', NULL, '2025-12-25 03:20:49', '2025-12-25 03:20:49');
+('lLC3vSkrEKEyoXzSf7hh1Ai7aYz2xi7AbYrdjOeC', 25, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiOEtiTEEwWW1EcE5YZUJ1QXR2UzZGZ0c5NkhlVWxuWXl0MFpqWkxrUyI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6Mzc6Imh0dHA6Ly9sb2NhbGhvc3Q6ODAwMC9hZG1pbi9kYXNoYm9hcmQiO3M6NToicm91dGUiO3M6MTU6ImFkbWluLmRhc2hib2FyZCI7fXM6NjoiX2ZsYXNoIjthOjI6e3M6Mzoib2xkIjthOjA6e31zOjM6Im5ldyI7YTowOnt9fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjI1O30=', 1767143912),
+('QpzK1ufxmAJilaVaTV1p6iVB2RaZ5GBQZQul30dk', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:146.0) Gecko/20100101 Firefox/146.0', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoiTUtnYnhLRUJtTkRDeHFHcThXVXg5YXlnQ1EzZEozdmJBWGxxaEtodSI7czo5OiJfcHJldmlvdXMiO2E6Mjp7czozOiJ1cmwiO3M6MjE6Imh0dHA6Ly8xMjcuMC4wLjE6ODAwMCI7czo1OiJyb3V0ZSI7czo0OiJob21lIjt9czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319fQ==', 1767147574);
+INSERT INTO `skills` (`id`, `name`, `date_of_exp`, `url`, `image_url`, `created_at`, `updated_at`) VALUES
+(3, 'JavaScript', '2023-03-06 00:00:00', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg', NULL, '2025-12-23 06:31:08', '2025-12-30 09:30:31'),
+(7, 'React', '2023-06-03 00:00:00', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg', NULL, '2025-12-25 02:01:06', '2025-12-30 10:57:27'),
+(8, 'Next JS', '2024-08-03 00:00:00', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg', NULL, '2025-12-25 02:02:30', '2025-12-30 10:58:03'),
+(9, 'Vite JS', '2023-08-04 00:00:00', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg', NULL, '2025-12-25 02:03:20', '2025-12-30 10:58:44'),
+(10, 'Inertia JS', '2024-08-13 00:00:00', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/inertiajs/inertiajs-original.svg', NULL, '2025-12-25 02:04:45', '2025-12-30 11:00:01'),
+(11, 'TypeScript', NULL, 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg', NULL, '2025-12-25 02:05:33', '2025-12-25 02:05:45'),
+(12, 'Laravel', '2022-04-07 00:00:00', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-original.svg', NULL, '2025-12-25 02:08:40', '2025-12-30 15:00:20'),
+(13, 'Livewire', '2025-12-10 00:00:00', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/livewire/livewire-original.svg', NULL, '2025-12-25 02:10:09', '2025-12-30 11:02:37'),
+(14, 'Node JS', '2025-02-15 00:00:00', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg', NULL, '2025-12-25 02:15:49', '2025-12-30 11:04:18'),
+(15, 'Express', '2025-02-15 00:00:00', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg', NULL, '2025-12-25 02:23:42', '2025-12-30 11:04:40'),
+(16, 'MongoDB', '2025-02-15 00:00:00', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg', NULL, '2025-12-25 02:25:33', '2025-12-30 11:05:54'),
+(17, 'Python', '2025-08-01 00:00:00', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg', NULL, '2025-12-25 02:26:51', '2025-12-30 11:08:15'),
+(18, 'Django', '2025-08-27 00:00:00', 'https://static.djangoproject.com/img/logos/django-logo-negative.svg', NULL, '2025-12-25 02:29:37', '2025-12-30 11:06:45'),
+(19, 'HTML', '2021-07-08 00:00:00', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg', NULL, '2025-12-25 03:02:37', '2025-12-30 14:57:39'),
+(20, 'CSS', '2021-07-08 00:00:00', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg', NULL, '2025-12-25 03:02:59', '2025-12-30 14:57:15'),
+(21, 'TailwindCSS', NULL, 'https://tailwindcss.com/_next/static/media/tailwindcss-mark.d52e9897.svg', NULL, '2025-12-25 03:04:27', '2025-12-25 03:05:38'),
+(22, 'Bootstrap', '2023-08-16 00:00:00', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg', NULL, '2025-12-25 03:06:12', '2025-12-30 11:09:08'),
+(23, 'Flutter', '2025-07-27 00:00:00', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/flutter/flutter-original.svg', NULL, '2025-12-25 03:08:07', '2025-12-30 11:09:37'),
+(24, 'PHP', '2022-04-07 00:00:00', 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg', NULL, '2025-12-25 03:18:18', '2025-12-30 14:59:48'),
+(25, 'Laravel Splade', NULL, 'https://raw.githubusercontent.com/protonemedia/laravel-splade/main/logo.svg', NULL, '2025-12-25 03:20:49', '2025-12-30 02:17:34');
 INSERT INTO `social_media` (`id`, `name`, `icon_cdn`, `icon`, `url`, `created_at`, `updated_at`, `svg_path`) VALUES
 (3, 'Github', '', '', 'https://github.com/MDAnwar58', '2025-12-24 12:37:01', '2025-12-25 04:47:20', 'M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z');
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `two_factor_secret`, `two_factor_recovery_codes`, `two_factor_confirmed_at`, `remember_token`, `created_at`, `updated_at`) VALUES
 (25, 'MD Anwar Sayeed', 'anwar.saeed656@gmail.com', NULL, '$2y$12$cFRP2ywzFgpXfgNX18HIa..NTStgRzpd9aINJfKpFn/TsTeE2wzNK', NULL, NULL, NULL, 'qvVuoLxR7E9fam0ToQyiCUYcRMvrloCcddnjDWpLUPxu6JLrCbBDFD9dLYbk', '2025-12-21 06:58:11', '2025-12-21 06:58:11');
+INSERT INTO `visitors` (`id`, `ip`, `device_token`, `device_type`, `created_at`, `updated_at`) VALUES
+(1, '127.0.0.1', 'c21a5ec84e993db0c2d6cb9d501b5499fd01f90fbd8bfbbfb66d934a0f144e38', 'Desktop', '2025-12-31 02:17:13', '2025-12-31 02:17:13');
 INSERT INTO `works` (`id`, `name`, `short_desc`, `type`, `live_demo_link`, `github_link`, `image`, `more_info`, `created_at`, `updated_at`) VALUES
 (12, 'News Portal', 'Personalized, credible, concise news. Clean, real-time, ad-light.', 'web app', NULL, 'https://github.com/MDAnwar58/News-Portal', NULL, '<p class=\"ds-markdown-paragraph\" align=\"center\"><strong><span>News Portal</span></strong></p><p class=\"ds-markdown-paragraph\" align=\"center\"><strong><span><br></span></strong></p><p class=\"ds-markdown-paragraph\"><strong><span>QuickNews</span></strong><span> is a modern news portal web application built using </span><strong><span>Next.js</span></strong><span>. The project, focused solely on the </span><strong><span>frontend</span></strong><span>,\r\n delivers a clean, ad-light user interface for personalized, credible, \r\nand concise news in real-time. It curates stories from trusted sources \r\nto tailor content to individual user interests.</span></p><br><ul><li><p class=\"ds-markdown-paragraph\"><span>Developed the frontend for a modern news portal using </span><strong><span>Next.js</span></strong><span>.</span></p></li><li><p class=\"ds-markdown-paragraph\"><span>Engineered a clean, ad-light UI to deliver personalized, credible, and concise news in real-time.</span></p></li><li><p class=\"ds-markdown-paragraph\"><span>Built a user-centric interface that curates content from trusted sources to match individual interests.</span></p></li></ul><p><br></p>', '2025-12-28 02:35:08', '2025-12-28 11:09:25'),
 (13, 'Gedget Ecommerce', 'Laravel Inertia React e-commerce platform for modern gadgets and electronics.', 'web app', NULL, 'https://github.com/MDAnwar58/Gedget_Ecommerce', 'http://127.0.0.1:8000/uploads/work-images/Fw3hOuC9IizSl4f6HztSH8rdBxt7nPYfOLEhqFJO.png', '<h3 align=\"center\"><strong><span>Gedget Ecommerce</span></strong></h3><h3 align=\"center\"><strong><span><br></span></strong></h3><p><span>Gedget Ecommerce is a sophisticated, full-stack web application \r\nengineered as a specialized online retail platform dedicated to the sale\r\n of modern gadgets and electronics. The project leverages a powerful and\r\n modern technology stack—<b>Laravel </b>for the robust backend API and \r\napplication logic, <b>Inertia.js</b> as the glue layer for routing and data \r\nbinding, and <b>React </b>for building a dynamic, component-based frontend user\r\n interface. This architecture merges the full control and security of \r\n<b>Laravel </b>with the seamless, app-like interactivity of a single-page \r\napplication (SPA).</span></p>', '2025-12-28 03:11:13', '2025-12-28 11:09:14'),

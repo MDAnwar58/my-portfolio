@@ -32,6 +32,7 @@ class SkillController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
+            'date_of_exp' => 'nullable|date',
             'url' => 'nullable|url|max:255',
             'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
@@ -74,6 +75,7 @@ class SkillController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
+            'date_of_exp' => 'nullable|date',
             'url' => 'nullable|url|max:255',
             'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);

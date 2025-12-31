@@ -51,6 +51,13 @@ use Illuminate\Support\Str;
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                             Name
                         </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                            Skill Start Date
+                        </th>
+
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                            Experience
+                        </th>
 
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                             Actions
@@ -69,6 +76,42 @@ use Illuminate\Support\Str;
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
                             {{ $skill->name }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                            @if($skill->date_of_exp)
+                            {{ $skill->date_of_exp->format('Y M, d')  }}
+                            @else
+                            <span class="text-gray-400">N/A</span>
+                            @endif
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
+                            {{-- Calculate how many years and month as like example 2.5 years in PHP $skill->date_of_exp --}}
+                            @php
+                            $totalWeeks = 0;
+                            $totalMonths = 0;
+                            $years = 0;
+
+                            $start = $skill->date_of_exp;
+                            $end = now();
+                            if($start){
+                            $totalWeeks = $start->diffInWeeks($end);
+                            $totalMonths = $start->diffInMonths($end);
+                            $years = round($totalMonths / 12, 1);
+                            }
+                            @endphp
+                            @if($skill->date_of_exp)
+                            @if($years < 1)
+                            @if($totalMonths < 1)
+                            {{ round($totalWeeks) .' Weeks' }}
+                            @else
+                            {{ round($totalMonths) .' Months' }}
+                            @endif
+                            @else
+                            {{ $years .' Years' }}
+                            @endif
+                            @else
+                            <span class="text-gray-400">N/A</span>
+                            @endif
                         </td>
 
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">

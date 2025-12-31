@@ -32,6 +32,36 @@
                         <img src="{{ $skill->url ?? $skill->image_url }}" alt="{{ $skill->name }}" />
                     </div>
                     <h3 class="skill-title">{{ $skill->name }}</h3>
+
+                    <div class="skill-exp">
+                        @php
+                        $totalWeeks = 0;
+                        $totalMonths = 0;
+                        $years = 0;
+
+                        $start = $skill->date_of_exp;
+                        $end = now();
+                        if($start){
+                        $totalWeeks = $start->diffInWeeks($end);
+                        $totalMonths = $start->diffInMonths($end);
+                        $years = round($totalMonths / 12, 1);
+                        }
+                        @endphp
+                        {{ $skill->name }} experience is 
+                         @if($skill->date_of_exp)
+                            @if($years < 1)
+                            @if($totalMonths < 1)
+                            {{ round($totalWeeks) .' Weeks' }}.
+                            @else
+                            {{ round($totalMonths) .' Months' }}.
+                            @endif
+                            @else
+                            {{ $years .' Years' }}.
+                            @endif
+                            @else
+                            <span class="text-gray-400">N/A.</span>
+                            @endif
+                    </div>
                 </div>
                 @endforeach
                 @endif

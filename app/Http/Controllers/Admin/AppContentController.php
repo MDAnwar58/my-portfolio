@@ -24,7 +24,7 @@ class AppContentController extends Controller
             'hero_l_title' => 'required|string|max:255',
             'hero_short_desc' => 'required|string',
             'projects_count' => 'required|integer',
-            'exp_duration' => 'required|string|max:255',
+            'exp_duration' => 'required|date',
             'happy_client' => 'required|integer',
             'feature_1' => 'required|string|max:255',
             'feature_2' => 'required|string|max:255',

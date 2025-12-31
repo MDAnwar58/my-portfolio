@@ -27,4 +27,7 @@ class AppContent extends Model
         'p_avatar',
         'working_for',
     ];
+    protected $casts = [
+        'exp_duration' => 'datetime'
+    ];
 }

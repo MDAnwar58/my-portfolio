@@ -16,6 +16,8 @@
                     <div class="space-y-4">
                         <x-input type="text" name="name" id="name" placeholder="Enter skill name" label="Skill Name" :value="old('name', $skill->name)" required />
 
+                        <x-input type="date" name="date_of_exp" id="date_of_exp" placeholder="Enter date of experience" label="Date of Experience (Optional)" :value="old('date_of_exp', $skill->date_of_exp ? $skill->date_of_exp->format('Y-m-d') : '')" />
+
                         <x-input type="url" name="url" id="url" placeholder="Enter URL" label="URL (Optional)" :value="old('url', $skill->url)" />
 
                         <x-input type="file" name="image_url" id="image_url" label="Image (Optional)" :value="old('image_url', $skill->image_url)" />

@@ -46,7 +46,7 @@
                     <span class="stat-label">Projects</span>
                 </div>
                 <div class="stat">
-                    @php
+                    {{-- @php
                     function convertOrdinalToNumber($string)
                     {
                     // Remove non-numeric characters except decimal point and minus sign
@@ -54,8 +54,16 @@
                     return (float) $cleaned;
                     }
                     $year_of_exp = convertOrdinalToNumber($appContent->exp_duration)
+                    @endphp --}}
+                    @php
+                    $year_of_exp = 0;
+                    $start = $appContent->exp_duration;
+                    $end = now();
+                    if($start){
+                    $year_of_exp = $start->diffInMonths($end);
+                    }
                     @endphp
-                    <span class="stat-number" data-target="{{ $year_of_exp }}">0</span>
+                    <span class="stat-number" data-target="{{ round($year_of_exp / 12, 1)  }}">0</span>
                     <span class="stat-label">Years Exp</span>
                 </div>
                 {{-- <div class="stat">

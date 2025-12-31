@@ -27,7 +27,7 @@
 
                 <x-input type="text" name="hero_l_title" id="hero_l_title" label="Hero Last Title" value="{{ $appContent->hero_l_title ?? '' }}" dangerousHtml />
 
-                <x-input type="text" name="exp_duration" id="exp_duration" label="Experience Duration" value="{{ $appContent->exp_duration ?? '' }}" />
+                <x-input type="date" name="exp_duration" id="exp_duration" label="Experience Duration" value="{{ $appContent->exp_duration ? $appContent->exp_duration->format('Y-m-d') : '' }}" />
 
                 <x-input type="number" name="projects_count" id="projects_count" label="Projects Count" value="{{ $appContent->projects_count ?? '' }}" />
 
