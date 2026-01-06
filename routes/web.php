@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\WorkController;
 use App\Http\Controllers\Admin\SkillController;
 use App\Http\Controllers\Admin\ContactController as AdminContactController;
@@ -19,7 +20,7 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::post('/contact', [ContactController::class, 'store_contact'])->name('contact.store');
 
-Route::view('admin/dashboard', 'admin/dashboard')
+Route::get('admin/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('admin.dashboard');
 
