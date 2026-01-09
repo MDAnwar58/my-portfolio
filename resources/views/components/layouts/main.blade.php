@@ -7,6 +7,16 @@
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    {{-- for seo purposes --}}
+    {{-- <meta property="og:type" content="{{ $type }}"> --}}
+    {{-- <meta property="og:url" content="{{ $url }}"> --}}
+    {{-- <meta property="og:title" content="{{ $title }}"> --}}
+
+    <meta property="og:url" content="{{ config('app.url') }}">
+    <meta property="og:title" content="{{ config('app.name') }}">
+    <meta property="og:description" content="{{ 'Crafting digital experiences that blend innovative design with cutting-edge technology. Specializing in web development, Web design, and creative solutions.' }}">
+    <meta property="og:image" content="{{ asset('apple-touch-icon.png') }}">
+    <meta property="og:site_name" content="{{ config('app.name') }}">
 
     <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />

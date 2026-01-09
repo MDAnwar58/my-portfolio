@@ -20,12 +20,11 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 Route::post('/contact', [ContactController::class, 'store_contact'])->name('contact.store');
 
-Route::get('admin/dashboard', [DashboardController::class, 'index'])
-    ->middleware(['auth', 'verified'])
-    ->name('admin.dashboard');
 
 
-Route::prefix('admin')->middleware(['auth'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'is-active'])->group(function () {
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+
     Route::redirect('settings', 'settings/profile');
 
     Route::get('settings/profile', Profile::class)->name('admin.profile.edit');
